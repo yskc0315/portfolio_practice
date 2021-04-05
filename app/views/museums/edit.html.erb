@@ -1,0 +1,22 @@
+<%= form_with model:@museum, local:true do |f| %>
+  <%= f.label :appearance_image, '外観イメージ' %>
+  <%= f.attachment_field :appearance_image %><br/>
+
+  <%= f.label :name, '博物館名' %>
+  <%= f.text_field :name %><br/>
+
+  <%= f.label :'営業時間' %>
+  <%= f.time_field :opening_time , value: "#{@museum.opening_time}" %>
+  <%= f.time_field :closing_time , value: "#{@museum.closing_time}" %><br/>
+
+  <%= f.label :'定休日' %>
+  <% @regular_holiday.each do |r| %>
+    <%= f.label :regular_holiday, r %>
+    <%= f.check_box :regular_holiday, {multiple: true}, r, nil %>
+  <% end %><br/>
+
+  <%= f.label :entrance_fee ,'入場料' %>
+  <%= f.text_field :entrance_fee %><br/>
+
+  <%= f.submit '更新' %>
+<% end %>

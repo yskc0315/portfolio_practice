@@ -1,0 +1,20 @@
+<div>
+  <%= attachment_image_tag @museum, :appearance_image, size:'100x100', format: 'jpeg' %>
+</div>
+<div>
+  <%= @museum.name %>
+</div>
+<div>
+  <span>営業時間</span>
+  <%= @museum.opening_time %>~<%= @museum.closing_time %>
+</div>
+<div>
+  <span>定休日</span>
+  <%= @museum.regular_holiday %>
+</div>
+<div>
+  <span>入場料</span>
+  <%= @museum.entrance_fee.to_s(:delimited) %>円
+</div>
+
+<%= link_to '編集する', edit_museum_path(@museum.id) %>
