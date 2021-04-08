@@ -1,0 +1,12 @@
+<% visitor = notification.visitor %>
+<% visited = notification.visited %>
+      <%= link_to user_path(visitor) do %>
+          <%= visitor.name %>
+      <% end %>
+      <p>さんが</p>
+
+      <% case notification.action %>
+        <% when 'like' then %>
+          <%= link_to 'あなたの投稿' %>
+            <p>にいいねしました</p>
+      <% end %>

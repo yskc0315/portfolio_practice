@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  museum_id: 1
+  title: MyString
+  body: MyText
+  how_to_visit: 1
+  companion: 1
+
+two:
+  user_id: 1
+  museum_id: 1
+  title: MyString
+  body: MyText
+  how_to_visit: 1
+  companion: 1

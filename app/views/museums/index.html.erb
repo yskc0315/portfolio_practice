@@ -3,6 +3,6 @@
     <%= attachment_image_tag museum, :appearance_image, size:'100x100', format: 'jpeg' %>
   </div>
   <div>
-    <%= link_to museum.name, museum_path(museum.id) %>
+    <%= museum.prefecture %><%= link_to museum.name, museum_path(museum.id) %><%= museum.genre.name %>
   </div>
 <% end %>

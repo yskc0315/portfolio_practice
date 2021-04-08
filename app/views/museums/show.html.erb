@@ -5,6 +5,12 @@
   <%= @museum.name %>
 </div>
 <div>
+  <span>所在地</span>
+  <%= link_to maps_path do %>
+    <%= @museum.prefecture %><%= @museum.address %>
+  <% end %>
+</div>
+<div>
   <span>営業時間</span>
   <%= @museum.opening_time %>~<%= @museum.closing_time %>
 </div>
@@ -17,4 +23,82 @@
   <%= @museum.entrance_fee.to_s(:delimited) %>円
 </div>
 
-<%= link_to '編集する', edit_museum_path(@museum.id) %>
+<div>
+  <% if @museum.recommended_by?(current_user) %>
+    <%= link_to museum_recommend_path(@museum), method: :delete do %>
+      ★
+    <% end %>
+    <%= @museum.recommends.count %>おすすめ
+  <% else %>
+    <%= link_to museum_recommends_path(@museum), method: :post do %>
+      ☆
+    <% end %>
+    <%= @museum.recommends.count %>おすすめ
+  <% end %>
+</div>
+
+<div>
+  <% if @museum.visited_by?(current_user) %>
+    <%= link_to museum_visit_path(@museum), method: :delete do %>
+      行った！
+    <% end %>
+    <%= @museum.visits.count %>人訪問しました！
+  <% else %>
+    <%= link_to museum_visits_path(@museum), method: :post do %>
+      まだ！
+    <% end %>
+    <%= @museum.visits.count %>人の人が訪問しました！
+  <% end %>
+</div>
+
+<div>
+  <%= link_to '編集する', edit_museum_path(@museum.id) %>
+</div>
+
+<% @comments.each do |comment| %>
+  <%= attachment_image_tag comment.user, :profile_image, size:'30x30', format: 'jpeg' %>
+  <%= comment.user.name %>
+  <%= comment.title %>
+  <%= comment.body %>
+  <%= comment.how_to_visit %>
+  <%= comment.companion %>
+  <% comment.post_images.each do |image| %>
+    <%= attachment_image_tag image, :image, size:'30x30', format: 'jpeg' %>
+  <% end %>
+  <% if comment.favorited_by?(current_user) %>
+    <%= link_to 'いいねはずすボタン', museum_comment_favorite_path(@museum, comment), method: :delete %>
+  <% else %>
+    <%= link_to 'いいねボタン', museum_comment_favorites_path(@museum, comment), method: :post %>
+  <% end %>
+<% end %>
+
+<div>
+  <h4>コメントする！</h4>
+  <%= form_with model:@comment, url: museum_comments_path(@museum.id) , local:true do |f| %>
+    <%= f.label :title, 'タイトル' %>
+      <%= f.text_field :title %><br/>
+    <%= f.label :body, '感想' %>
+      <%= f.text_area :body %><br/>
+    <%= f.label :how_to_visit, 'どうやって行きましたか？' %>
+      <%= f.label :how_to_visit, '電車で' %>
+      <%= f.radio_button :how_to_visit, :'電車で' %>
+      <%= f.label :how_to_visit, '車で' %>
+      <%= f.radio_button :how_to_visit, :'車で' %>
+      <%= f.label :how_to_visit, 'バスで' %>
+      <%= f.radio_button :how_to_visit, :'バスで' %>
+      <%= f.label :how_to_visit, 'その他' %>
+      <%= f.radio_button :how_to_visit, :'その他' %><br/>
+    <%= f.label :companion, 'どなたと行きましたか？' %>
+      <%= f.label :companion, 'おひとり' %>
+      <%= f.radio_button :companion, :'おひとり' %>
+      <%= f.label :companion, '友達と' %>
+      <%= f.radio_button :companion, :'友達と' %>
+      <%= f.label :companion, '恋人と' %>
+      <%= f.radio_button :companion, :'恋人と' %>
+      <%= f.label :companion, '家族と' %>
+      <%= f.radio_button :companion, :'家族と' %><br/>
+    <%= f.label :post_images_images, '写真投稿' %>
+      <%= f.attachment_field :post_images_images, multiple: true %>
+    <%= f.submit '投稿する' %>
+  <% end %>
+</div>

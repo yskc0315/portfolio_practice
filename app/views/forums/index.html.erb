@@ -1,0 +1,12 @@
+<% @forums.each do |forum| %>
+  <%= forum.title %>
+  <%= forum.body %>
+  <%= forum.users.count %>人が参加中
+  <%= link_to '参加する！', forum_path(forum.id) %>
+<% end %>
+
+<%= form_with model:@forum, local:true do |f| %>
+  <%= f.text_field :title %>
+  <%= f.text_area :body %>
+  <%= f.submit '掲示板を作成する' %>
+<% end %>

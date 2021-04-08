@@ -1,3 +1,7 @@
+<% if current_user.admin? %>
+  管理者用！！！
+<% end %>
+
 <%= form_with model: @museum, local: true do |f| %>
 
   <%= f.label :appearance_image, '外観イメージ' %>
@@ -5,6 +9,10 @@
 
   <%= f.label :name, '博物館名' %>
   <%= f.text_field :name %><br/>
+
+  <%= f.label :'住所' %>
+  <%= f.select :prefecture, Museum.prefectures.keys %>
+  <%= f.text_field :address %><br/>
 
   <%= f.label :'営業時間' %>
   <%= f.time_field :opening_time %>
@@ -19,6 +27,64 @@
   <%= f.label :entrance_fee ,'入場料' %>
   <%= f.text_field :entrance_fee %><br/>
 
+  <%= f.label :url ,'公式HP' %>
+  <%= f.text_field :url %><br/>
+
+  <%= f.label :genre_id, 'ジャンル' %>
+  <%= f.collection_select :genre_id, Genre.all, :id, :name, include_blank: "--選択して下さい--" %>
+
   <%= f.submit '登録' %>
 
 <% end %>
+
+<input id="address" type="textbox" placeholder="住所を入力">
+<input type="button" value="探す" onclick="codeAddress()">
+
+<div id='map'></div>
+
+<style>
+#map {
+  height: 100px;
+  width: 100px;
+}
+</style>
+
+<script>
+let map
+
+const display = document.getElementById('display')
+
+function initMap(){
+  geocoder = new google.maps.Geocoder()
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat:34.9218969, lng:139.12026},
+    zoom: 8,
+  });
+
+  marker = new google.maps.Marker({
+    position:  {lat:34.9218969, lng:139.12026},
+    map: map
+  });
+}
+
+let geocoder
+
+function codeAddress(){
+  let inputAddress = document.getElementById('address').value;
+
+  geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+    if (status == 'OK') {
+      map.setCenter(results[0].geometry.location);
+      var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+      });
+      display.textContent = "検索結果：" + results[ 0 ].geometry.location
+    } else {
+      alert('該当する結果がありませんでした：' + status);
+    }
+  });
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCX9tQSlt8dBSvieknk5UUh-ggWi38JhTU&callback=initMap" async defer></script>

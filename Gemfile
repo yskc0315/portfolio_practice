@@ -65,3 +65,8 @@ gem 'devise'
 
 gem "refile", require: 'refile/rails', github: 'refile/refile'
 gem "refile-mini_magick"
+
+gem 'geocoder'
+gem "gmaps4rails"
+gem "gon"
+gem "dotenv-rails"

@@ -1,4 +1,5 @@
 <% @users.each do |user| %>
+  <%= attachment_image_tag user, :profile_image, size:'40x40', format: 'jpeg' %>
   <%= user.name %>
   <%= user.prefecture %>
 <% end %>
